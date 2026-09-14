@@ -21,37 +21,28 @@ public class Transaction {
 		this.category = category;
 		this.date = date;
 		this.isIncome = isIncome;
-
-		checkDate();
+		
+		if (isValidDate()) {
+			System.out.println("Valid date inserted.");
+		}
 	}
 
-	private boolean isValidDate(String date) {
+	private boolean isValidDate() {
 		int index = 0;
-		boolean validation = true;
 
-		if (date.length() != 10) {
-			validation = false;
+		if (this.date.length() != 10) {
+			throw new IllegalArgumentException("Date is invalid - incorrect number of characters: " + this.date); 
 		}
 
-		while (index < date.length()) {
+		while (index < this.date.length()) {
 			boolean checkPositions = index == 4 || index == 7;
-			if (!checkPositions && !Character.isDigit(date.charAt(index))) {
-				validation = false;
-			} else if (checkPositions && date.charAt(index) != '-') {
-				validation = false;
+			if (!checkPositions && !Character.isDigit(this.date.charAt(index))) {
+				throw new IllegalArgumentException("Date is invalid - wrong placement of dashes: " + this.date);
+			} else if (checkPositions && this.date.charAt(index) != '-') {
+				throw new IllegalArgumentException("Date is invalid - use dashes '-': " + this.date);
 			}
 			index++;
 		}
-		return validation;
+		return true;
 	}
-
-	private void checkDate() {
-		boolean validDate = isValidDate(date);
-		if (validDate) {
-			System.out.println("The date check out.");
-		} else {
-			System.out.println("The date is invalid.");
-		}
-	}
-
 }
